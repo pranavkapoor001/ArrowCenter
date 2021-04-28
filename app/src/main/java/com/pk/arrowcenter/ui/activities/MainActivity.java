@@ -3,6 +3,8 @@ package com.pk.arrowcenter.ui.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +24,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     // Vars
     private RecyclerView recyclerView;
+    private NotificationAdapter notificationAdapter;
     private NotificationDataUtils dataUtils;
+
+    // UI Components
+    private TextView tvNoNotifications;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Get views
         recyclerView = findViewById(R.id.notification_recycler_view);
+        tvNoNotifications = findViewById(R.id.empty_view);
 
         // Initialize everything
         init();
@@ -48,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Initialize notification item swipe listener
         initTouchHelper();
+
+        // Show No Notifications text if empty
+        showEmptyText();
     }
 
     /**
@@ -64,13 +74,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      */
     private void initNotificationList() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
 
         // Get data
         dataUtils = new NotificationDataUtils(this);
 
-        NotificationAdapter notificationAdapter = new NotificationAdapter(dataUtils.getSavedNotifications());
+        notificationAdapter = new NotificationAdapter(dataUtils.getSavedNotifications());
         recyclerView.setAdapter(notificationAdapter);
     }
 
@@ -84,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         ArrayList<NotificationModel> notificationsList = dataUtils.getSavedNotifications();
         notificationsList.remove(position);
         dataUtils.updateNotificationList(notificationsList);
+
+        // Show No Notifications text if empty
+        showEmptyText();
     }
 
     /**
@@ -103,6 +116,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         });
         touchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    /**
+     * Displays No Notifications text if there are no items in recycler view
+     */
+    private void showEmptyText() {
+        // Show no notifications text conditionally
+        if (notificationAdapter.getItemCount() == 0)
+            tvNoNotifications.setVisibility(View.VISIBLE);
+        else
+            tvNoNotifications.setVisibility(View.GONE);
     }
 
 

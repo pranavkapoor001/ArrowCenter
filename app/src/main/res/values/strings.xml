@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ArrowCenter</string>
     <string name="arrow">Arrow</string>
+    <string name="no_notifications">No notifications</string>
 </resources>
