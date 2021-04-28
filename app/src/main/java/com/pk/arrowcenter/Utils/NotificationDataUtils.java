@@ -56,7 +56,7 @@ public class NotificationDataUtils {
      *
      * @return List containing saved notifications
      */
-    private ArrayList<NotificationModel> getSavedNotifications() {
+    public ArrayList<NotificationModel> getSavedNotifications() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         Gson gson = new Gson();
         String json = prefs.getString(Constants.PREFS_KEY, null);
