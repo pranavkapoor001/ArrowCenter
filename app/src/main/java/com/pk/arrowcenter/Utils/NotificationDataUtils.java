@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pk.arrowcenter.models.NotificationModel;
@@ -24,13 +23,14 @@ public class NotificationDataUtils {
     /**
      * Adds new notification to notification list
      *
-     * @param topic        FCM topic for notification
-     * @param notification object containing FCM notification data
+     * @param topic   FCM topic for notification
+     * @param title   notification title
+     * @param message notification body
      */
-    public void addNotification(String topic, RemoteMessage.Notification notification) {
+    public void addNotification(String topic, String title, String message) {
         // Get saved notifications and append new one
         ArrayList<NotificationModel> notificationsList = getSavedNotifications();
-        notificationsList.add(new NotificationModel(topic, notification.getTitle(), notification.getBody()));
+        notificationsList.add(new NotificationModel(topic, title, message));
 
         // Save
         updateNotificationList(notificationsList);

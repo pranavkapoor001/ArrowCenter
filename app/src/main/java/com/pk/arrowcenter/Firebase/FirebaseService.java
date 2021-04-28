@@ -23,12 +23,11 @@ public class FirebaseService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         Log.e(TAG, "Message received");
 
-        if (remoteMessage.getNotification() == null)
-            return;
-
         // Save new notification
         String topic = remoteMessage.getFrom();
         NotificationDataUtils dataUtils = new NotificationDataUtils(this);
-        dataUtils.addNotification(topic, remoteMessage.getNotification());
+        dataUtils.addNotification(topic,
+                remoteMessage.getData().get("title"),
+                remoteMessage.getData().get("body"));
     }
 }
