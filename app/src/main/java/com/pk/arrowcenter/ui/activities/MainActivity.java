@@ -1,6 +1,8 @@
 package com.pk.arrowcenter.ui.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +18,7 @@ import com.pk.arrowcenter.ui.adapters.NotificationAdapter;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     // Vars
     private RecyclerView recyclerView;
@@ -101,5 +103,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         touchHelper.attachToRecyclerView(recyclerView);
+    }
+
+
+    /*------------------------------- Lifecycle methods ------------------------------------------*/
+    // Register OnSharedPreferenceChangeListener in onResume() and unregister in onPause()
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // Update data in recycler view then list
+        NotificationAdapter adapter = (NotificationAdapter) recyclerView.getAdapter();
+        if (adapter != null) {
+            adapter.updateNotifications(dataUtils.getSavedNotifications());
+            adapter.notifyDataSetChanged();
+        }
     }
 }

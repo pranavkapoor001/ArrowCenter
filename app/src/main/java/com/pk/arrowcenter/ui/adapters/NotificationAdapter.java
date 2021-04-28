@@ -18,12 +18,21 @@ import java.util.ArrayList;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
     // Vars
-    private final ArrayList<NotificationModel> mNotificationsList;
+    private ArrayList<NotificationModel> mNotificationsList;
 
     // UI Components
     private TextView tvNotificationTopic, tvNotificationTitle, tvNotificationMessage;
 
     public NotificationAdapter(ArrayList<NotificationModel> notificationsList) {
+        mNotificationsList = notificationsList;
+    }
+
+    /**
+     * Updates notifications list
+     *
+     * @param notificationsList updated list
+     */
+    public void updateNotifications(ArrayList<NotificationModel> notificationsList) {
         mNotificationsList = notificationsList;
     }
 
